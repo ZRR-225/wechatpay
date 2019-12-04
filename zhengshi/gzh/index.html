@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <title>MASK充值系统</title>
+    <script src="lib/vue.js"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+    <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+    <link rel="icon" sizes="any" mask="" href="image/favicon.png" />
+  </head>
+  <style type="text/css" media="screen">
+    /*base*/
+    blockquote,
+    body,
+    button,
+    dd,
+    dl,
+    dt,
+    fieldset,
+    form,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    hr,
+    input,
+    legend,
+    li,
+    ol,
+    p,
+    pre,
+    td,
+    textarea,
+    th,
+    ul {
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      font-family: SourceHanSansSC-Regular;
+    }
+
+    body {
+      font-size: 16px;
+      width: 100%;
+      height: 100%;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    html,
+    body {
+      font-family: "Microsoft YaHei", tahoma, arial, "Hiragino Sans GB",
+        \5b8b\4f53, sans-serif;
+    }
+
+    img {
+      display: block;
+    }
+
+    ol,
+    ul {
+      list-style: none;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+    * {
+      /* -webkit-touch-callout: none; */
+      /* -webkit-user-select: none; */
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    #mask {
+      width: 100%;
+      height: 100%;
+      background: url("./image/back.png");
+    }
+    .mask_title {
+      width: 100%;
+      text-align: center;
+      margin: 0 auto;
+      line-height: 50px;
+      color: #fff;
+    }
+    .mask_info {
+      display: flex;
+      align-items: center;
+      margin: 0 20px;
+      color: #fff;
+    }
+    .input-prepend {
+      /* 			background:url('./image/input_box.png') no-repeat;
+    	background-size: 100% 100%; */
+      margin-left: 10px;
+    }
+    input {
+      outline-style: none;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      padding: 10px 10px;
+      width: 220px;
+      color: #fff;
+      background: #202880;
+    }
+    .mask_choose {
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+    .choose {
+      width: 40%;
+      /* height: 26%; */
+      line-height: 40px;
+      font-size: 12px;
+      margin-top: 5%;
+      text-align: center;
+      background: url("./image/choose1.png") no-repeat;
+      background-size: 100% 100%;
+    }
+    .choose:hover {
+      width: 40%;
+      /* height: 26%; */
+      line-height: 40px;
+      font-size: 12px;
+      margin-top: 5%;
+      text-align: center;
+      background: url("./image/exchange_box.png") no-repeat;
+      background-size: 100% 100%;
+      /* 			color: #FFFFFF; */
+    }
+    .cont {
+      line-height: 85px;
+      font-size: 28px;
+      font-family: SourceHanSansSC-Medium;
+      font-weight: 500;
+      display: flex;
+      justify-content: center;
+      flex-wrap: nowrap;
+      align-items: center;
+      margin: 0 31px;
+    }
+    .cont div {
+      white-space: nowrap;
+    }
+    .mask_btn {
+      font-family: SourceHanSansSC-Medium;
+      font-weight: 500;
+      /* color:rgba(255,255,255,1); */
+      text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.35);
+    }
+    .mask_other {
+      margin: 0 auto;
+      width: 90%;
+      height: 20%;
+      /* 		    line-height: 20px; */
+      text-align: center;
+      background: url("./image/bg.png");
+      background-size: 100% 100%;
+      margin-top: 5%;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+    .txt {
+      font-size: 12px;
+      font-family: SourceHanSansSC-Regular;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 1);
+    }
+    .mask_code {
+      width: 109px;
+      height: 109px;
+      background: url("./image/code_border.png");
+      background-size: 100% 100%;
+    }
+    .img_code {
+      width: 96px;
+      height: 96px;
+      margin-top: 6px;
+      margin-left: 6px;
+    }
+    .submit {
+      background: linear-gradient(
+        -45deg,
+        rgba(255, 133, 231, 1) 20%,
+        rgba(58, 225, 255, 1) 100%
+      );
+      height: 40px;
+      text-align: center;
+      color: #fff;
+      font-size: 18px;
+      margin: 0 25px;
+      border-radius: 20px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+    button::after {
+      border: none;
+    }
+    button {
+      margin: 0;
+      padding: 0;
+      border: 1px solid transparent;
+      outline: none;
+      height: 39px;
+      border-radius: 20px;
+    }
+    #formTable {
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9;
+      display: none;
+      background-color: rgba(1, 1, 1, 0.5);
+    }
+    .formList {
+      color: #fff;
+      background-size: 100% 100%;
+      background-image: url("./image/alert_bg.png");
+      width: 64%;
+      padding: 23px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      flex-direction: column;
+      position: relative;
+    }
+    .form-close {
+      position: absolute;
+      right: 12px;
+      top: 16px;
+      background-image: url("./image/close.png");
+      width: 12px;
+      height: 12px;
+      background-size: cover;
+    }
+    .form-title {
+      margin-bottom: 25px;
+    }
+    .form-line {
+      width: 100%;
+      margin-bottom: 17px;
+    }
+    .label {
+      color: #fff;
+    }
+    .value {
+      color: #f492ff;
+    }
+    .notice {
+      font-size: 11px;
+      text-align: center;
+    }
+    .footer {
+      margin: 20px 0;
+      width: 100%;
+      align-items: center;
+      display: flex;
+      justify-content: space-around;
+    }
+    .my-btn-cancel {
+      background: linear-gradient(
+        -45deg,
+        rgba(255, 133, 231, 1) 20%,
+        rgba(58, 225, 255, 1) 100%
+      );
+      width: 70px;
+      height: 35px;
+    }
+    .my-btn-ture {
+      background: linear-gradient(
+        -45deg,
+        rgba(255, 133, 231, 1) 20%,
+        rgba(58, 225, 255, 1) 100%
+      );
+      width: 130px;
+      height: 35px;
+    }
+    .blank-wrap .mask_other {
+      position: absolute;
+      bottom: 20px;
+      left: 5%;
+    }
+    .result-img {
+      width: 183px;
+      margin: 150px auto;
+    }
+  </style>
+  <body>
+    <div id="mask">
+      <div class="mask_title">
+        MASK充值系统
+      </div>
+      <div v-if="status==='NORMAL'">
+        <div class="mask_info">
+          <span>必填项*</span>
+          <div class="input-prepend">
+            <!-- <span class="add-on">+86</span> -->
+            <input
+              id="mobileInput"
+              class="prependedInput"
+              :value="mobile"
+              placeholder="请输入充值帐号绑定的手机号码"
+            />
+          </div>
+        </div>
+        <div class="mask_choose">
+          <div
+            class="choose"
+            data-num="50"
+            v-for="(item,index) in dataList"
+            @click="showDetails(item)"
+          >
+            <div class="cont">
+              <div>
+                {{
+                  item.h5Diamond / 10000 >= 1
+                    ? item.h5Diamond / 10000
+                    : item.h5Diamond
+                }}
+              </div>
+              <label style="font-size:10px;">{{
+                item.h5Diamond / 10000 >= 1 ? "万钻" : "钻"
+              }}</label>
+            </div>
+            <div class="mask_btn">{{ item.money }}元</div>
+          </div>
+        </div>
+        <div class="mask_other">
+          <div class="mask_code">
+            <img src="./image/code.png" alt="" class="img_code" />
+          </div>
+          <div style="line-height:30px;display: flex;flex-direction: column;">
+            <button
+              class="submit"
+              @click="dataFormSubmit()"
+              id="code"
+              code="${param.code}"
+            >
+              立即充值
+            </button>
+            <div class="txt">充值其他金额 请扫码联系客服</div>
+          </div>
+        </div>
+
+        <div id="formTable">
+          <div class="formList">
+            <span class="form-close" @click="Cancel()"></span>
+            <div class="form-title">
+              请您确认
+            </div>
+            <div class="form-line">
+              <span class="label">充值账号: </span
+              ><span class="value">{{ dataForm.userCode }}</span>
+            </div>
+            <div class="form-line">
+              <span class="label">账号昵称: </span
+              ><span class="value">{{ dataForm.maskName }}</span>
+            </div>
+            <div class="form-line">
+              <span class="label">充值金额: </span
+              ><span class="value"
+                >{{ selectedItem && selectedItem.h5Diamond }}钻</span
+              >
+            </div>
+            <div class="notice">
+              <span style="color: red">*</span>
+              此笔充值无法退款且不可提现，请确认以上内容无误后继续支付
+            </div>
+            <div class="footer">
+              <!-- <button class="my-btn-cancel" @click="Cancel()">取消</button> -->
+              <button
+                class="my-btn-ture"
+                @click="Submit()"
+                id="code"
+                code="${param.code}"
+              >
+                确认
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div v-if="status==='SUCCESS'" class="blank-wrap">
+        <img src="./image/success.png" class="result-img" alt="" />
+        <div class="mask_other">
+          <div class="mask_code">
+            <img src="./image/code.png" alt="" class="img_code" />
+          </div>
+          <div style="line-height:30px;display: flex;flex-direction: column;">
+            <div class="txt">如有问题错误 请扫码联系客服</div>
+          </div>
+        </div>
+      </div>
+      <div v-if="status==='FAIL'" class="blank-wrap">
+        <img src="./image/fail.png" class="result-img" alt="" />
+        <div class="mask_other">
+          <div class="mask_code">
+            <img src="./image/code.png" alt="" class="img_code" />
+          </div>
+          <div style="line-height:30px;display: flex;flex-direction: column;">
+            <div class="txt">如有问题错误 请扫码联系客服</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript" src="js/jquery.js"></script>
+  <script type="text/javascript">
+    var env = {
+      prod: "zhimiao.sc", //zhimiao.sc  //正式
+      dev: "sys.sc"
+    };
+    var host = env.prod;
+    function getCode() {
+      try {
+        var code = window.location.search.substr(1).split("&")[0];
+        return code.split("=")[1];
+      } catch (error) {
+        alert("获取 code 出错");
+        return "";
+      }
+    }
+    var STATUS_NORMAL = "NORMAL",
+      STATUS_SUCCESS = "SUCCESS",
+      STATUS_FAIL = "FAIL";
+    var mask = new Vue({
+      el: "#mask",
+      data: {
+        status: STATUS_NORMAL,
+        money: "",
+        mobile: "",
+        selectedItem: undefined,
+        dataList: [],
+        dataForm: {
+          maskName: "",
+          userCode: ""
+        }
+      },
+      init: {},
+      mounted: function() {
+        this.$http
+          .get("https://" + host + "-msr.com/zhimiao/sys/pay/list")
+          .then(res => {
+            console.log(res);
+            if (res.status !== 200) {
+              alert("请求失败");
+              return;
+            }
+            this.dataList = res.body.data;
+          });
+        var _this = this;
+        $("#mobileInput").on("change", function(e) {
+          console.log(e.target.value);
+          _this.mobile = e.target.value;
+        });
+      },
+      methods: {
+        mobileChange(e) {
+          console.log(e);
+          this.mobile = e.target.value;
+        },
+        showDetails: function(item) {
+          this.selectedItem = item;
+        },
+        dataFormSubmit: function() {
+          if (this.mobile.length !== 11) {
+            alert("手机号格式有误!");
+            return;
+          }
+          if (this.selectedItem === undefined) {
+            return alert("请选择充值金额!");
+          }
+          //发送get请求
+          this.$http
+            .get(
+              "http://" +
+                host +
+                "-msr.com/zhimiao//sys/pay/queryUserByMobile",
+              {
+                params: {
+                  mobile: this.mobile,
+                  productId: this.selectedItem.productId
+                }
+              }
+            )
+            .then(
+              function(res) {
+                if (res.body.code === 0) {
+                  document.getElementById("formTable").style.display = "flex";
+                  this.dataForm.maskName = res.body.data.maskName;
+                  this.dataForm.userCode = res.body.data.userCode;
+                } else {
+                  alert(res.body.msg);
+                  this.selectedItem = undefined;
+                }
+              },
+              function() {
+                console.log("请求失败处理");
+              }
+            );
+        },
+        Cancel: function() {
+          document.getElementById("formTable").style.display = "none";
+        },
+        Submit: function() {
+          // var code ='0610k7j92s9EtJ0lrSj92Jjkj920k7jo';
+          var userCode = this.dataForm.userCode;
+          var money = this.money;
+          var mobile = this.mobile;
+          var code = getCode();
+          var _this = this;
+          if (code) {
+            this.$http
+              .post("https://" + host + "-msr.com/zhimiao/sys/pay/orders", {
+                code: code,
+                userCode: this.dataForm.userCode,
+                productId: this.selectedItem.productId
+              })
+              .then(function(result) {
+                if (typeof WeixinJSBridge == "undefined") {
+                  if (document.addEventListener) {
+                    document.addEventListener(
+                      "WeixinJSBridgeReady",
+                      function() {
+                        _this.onBridgeReady(result.body.data, _this);
+                      },
+                      false
+                    );
+                  } else if (document.attachEvent) {
+                    document.attachEvent("WeixinJSBridgeReady", onBridgeReady);
+                    document.attachEvent("onWeixinJSBridgeReady", function() {
+                      _this.onBridgeReady(result.body.data, _this);
+                    });
+                  }
+                } else {
+                  _this.onBridgeReady(result.body.data, _this);
+                }
+              });
+          } else {
+          }
+        },
+        onBridgeReady: function(data, _this) {
+          WeixinJSBridge.invoke(
+            "getBrandWCPayRequest",
+            {
+              appId: data.appId, //公众号名称,由商户传入
+              timeStamp: data.timeStamp, //时间戳,自1970年以来的秒数
+              nonceStr: data.nonceStr, //随机串
+              package: data.package,
+              signType: data.signType, //微信签名方式：
+              paySign: data.paySign //微信签名
+            },
+            function(res) {
+              if (res.err_msg == "get_brand_wcpay_request:ok") {
+                console.log("支付成功");
+                //支付成功后跳转的页面
+                _this.status = STATUS_SUCCESS;
+              } else if (res.err_msg == "get_brand_wcpay_request:cancel") {
+                console.log("支付取消");
+              } else if (res.err_msg == "get_brand_wcpay_request:fail") {
+                console.log("支付失败");
+                _this.status = STATUS_FAIL;
+                WeixinJSBridge.call("closeWindow");
+              } //使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回ok,但并不保证它绝对可靠。
+            }
+          );
+        }
+      },
+      watch: {}
+    });
+  </script>
+</html>
